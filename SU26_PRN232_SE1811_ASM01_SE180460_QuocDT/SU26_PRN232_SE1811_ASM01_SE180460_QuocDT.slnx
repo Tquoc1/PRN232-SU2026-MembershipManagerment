@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Membership.APIWebApp.QuocDT/Membership.APIWebApp.QuocDT.csproj" Id="67fd04b7-27ef-4499-a419-3251bd768488" />
+  <Project Path="Membership.Entities.QuocDT/Membership.Entities.QuocDT.csproj" />
+  <Project Path="Membership.Repositories.QuocDT/Membership.Repositories.QuocDT.csproj" />
+  <Project Path="Membership.Services.QuocDT/Membership.Services.QuocDT.csproj" />
+</Solution>
