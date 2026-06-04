@@ -26,13 +26,13 @@ namespace Membership.Repositories.QuocDT
                 .Include(x => x.Tier)
                 .FirstOrDefaultAsync(x => x.MembershipIdquocDt == id);
         }
-        public async Task<List<CustomerMembershipsQuocDt>> SearchAsync(string customerName, int? pointsBalance, string tierName)
+        public async Task<List<CustomerMembershipsQuocDt>> SearchAsync(string? customerName, int? currentPointsBalance, string? tierName)
         {
             return await _context.CustomerMembershipsQuocDts
                 .Include(x => x.Tier)
                 .Where(x =>
                     (string.IsNullOrEmpty(customerName) || x.CustomerName.Contains(customerName)) &&
-                    (!pointsBalance.HasValue || x.CurrentPointsBalance == pointsBalance) &&
+                    (!currentPointsBalance.HasValue || x.CurrentPointsBalance == currentPointsBalance) &&
                     (string.IsNullOrEmpty(tierName) || x.Tier.TierName.Contains(tierName))
                 )
                 .ToListAsync();

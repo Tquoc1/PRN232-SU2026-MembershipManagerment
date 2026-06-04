@@ -11,7 +11,10 @@ namespace Membership.Services.QuocDT
     public class CustomerMembershipsService : ICustomerMembershipsService
     {
         private readonly CustomerMembershipsQuocDtRepository _repository;
-        public CustomerMembershipsService(CustomerMembershipsQuocDtRepository repository ) => _repository ??= new CustomerMembershipsQuocDtRepository();
+        public CustomerMembershipsService(CustomerMembershipsQuocDtRepository repository)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
 
         public Task<int> CreateAsync(CustomerMembershipsQuocDt customer)
         {
@@ -78,17 +81,17 @@ namespace Membership.Services.QuocDT
             }
         }
 
-        public Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string customerName, int? pointsBalance, string tierName)
+        public Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string? customerName, int? currentPointsBalance, string? tierName)
         {
             //throw new NotImplementedException();
             try
             {
                 IEnumerable<CustomerMembershipsQuocDt> customers = _repository.GetAllAsync().Result;
-                if (!string.IsNullOrEmpty(customerName))
+                if (!string.IsNullOrWhiteSpace(customerName))
                     customers = customers.Where(c => c.CustomerName.Contains(customerName, StringComparison.OrdinalIgnoreCase));
-                if (pointsBalance.HasValue)
-                    customers = customers.Where(c => c.CurrentPointsBalance.HasValue && c.CurrentPointsBalance.Value >= pointsBalance.Value);
-                if (!string.IsNullOrEmpty(tierName))
+                if (currentPointsBalance.HasValue)
+                    customers = customers.Where(c => c.CurrentPointsBalance.HasValue && c.CurrentPointsBalance.Value == currentPointsBalance.Value);
+                if (!string.IsNullOrWhiteSpace(tierName))
                     customers = customers.Where(c => c.Tier != null && c.Tier.TierName.Contains(tierName, StringComparison.OrdinalIgnoreCase));
                 return Task.FromResult(customers);
 

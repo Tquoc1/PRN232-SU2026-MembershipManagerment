@@ -15,5 +15,6 @@ public partial class MembershipTiersQuocDt
 
     public double? PointsMultiplier { get; set; }
 
+    [System.Text.Json.Serialization.JsonIgnore]
     public virtual ICollection<CustomerMembershipsQuocDt> CustomerMembershipsQuocDts { get; set; } = new List<CustomerMembershipsQuocDt>();
 }

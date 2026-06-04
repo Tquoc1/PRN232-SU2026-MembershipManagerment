@@ -13,7 +13,7 @@ namespace Membership.Services.QuocDT
         // quyery method
         Task<IEnumerable<CustomerMembershipsQuocDt>> GetAllAsync();
         Task<CustomerMembershipsQuocDt> GetByIdAsync(Guid id);
-        Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string customerName, int? pointsBalance, string tierName);
+        Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string? customerName, int? currentPointsBalance, string? tierName);
         // mutaion method
         Task<int> CreateAsync(CustomerMembershipsQuocDt customer);
         Task<int> UpdateAsync(CustomerMembershipsQuocDt customer);

@@ -2,11 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Membership.Entities.QuocDT.Models;
 
 public partial class CustomerMembershipsQuocDt
 {
+    [Key]
     public Guid MembershipIdquocDt { get; set; }
 
     public string CustomerName { get; set; }
