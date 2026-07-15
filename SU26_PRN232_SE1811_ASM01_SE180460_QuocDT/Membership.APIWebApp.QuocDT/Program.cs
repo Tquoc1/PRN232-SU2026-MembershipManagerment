@@ -18,7 +18,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+    })
+    .AddOData(options =>
+    {
+        options.Select().Filter().OrderBy().Expand().SetMaxTop(null).Count();
+        options.AddRouteComponents("odata", GetEdmModel());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,11 +38,7 @@ builder.Services.AddScoped<ICustomerMembershipsService, CustomerMembershipsServi
 builder.Services.AddScoped<ISystemUserAccountService, SystemUserAccountService>();
 builder.Services.AddScoped<SystemUserAccountRepository>();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
-});
+// JSON options and OData are configured above
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -84,15 +88,14 @@ static IEdmModel GetEdmModel()
 {
     var odataBuilder = new ODataConventionModelBuilder();
     odataBuilder.EntitySet<CustomerMembershipsQuocDt>("CustomerMembershipsQuocDt");
+    odataBuilder.EntitySet<MembershipTiersQuocDt>("MembershipTiersQuocDt");
+    
+    odataBuilder.EntityType<MembershipTiersQuocDt>().HasKey(x => x.TierIdquocDt);
 
     return odataBuilder.GetEdmModel();
 }
 
-builder.Services.AddControllers().AddOData(options =>
-{
-    options.Select().Filter().OrderBy().Expand().SetMaxTop(null).Count();
-    options.AddRouteComponents("odata", GetEdmModel());
-});
+// OData is configured above
 
 var app = builder.Build();
 

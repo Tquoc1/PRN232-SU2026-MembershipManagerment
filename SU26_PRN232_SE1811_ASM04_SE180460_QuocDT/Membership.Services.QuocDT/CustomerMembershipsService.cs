@@ -1,4 +1,4 @@
-using Membership.Entities.QuocDT.Models;
+﻿using Membership.Entities.QuocDT.Models;
 using Membership.Repositories.QuocDT;
 using System;
 using System.Collections.Generic;
@@ -16,18 +16,21 @@ namespace Membership.Services.QuocDT
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
+        // 1. Thêm 'async', bỏ '.Result', dùng 'await' và return thẳng giá trị int
         public async Task<int> CreateAsync(CustomerMembershipsQuocDt customer)
         {
             try
             {
-                return await _repository.CreateAsync(customer);
+                var result = await _repository.CreateAsync(customer);
+                return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
         }
 
+        // 2. Hàm Delete
         public async Task<int> DeleteAsync(Guid id)
         {
             try
@@ -38,60 +41,80 @@ namespace Membership.Services.QuocDT
                 var result = await _repository.RemoveAsync(customer);
                 return result ? 1 : 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
         }
 
+        // 3. Hàm GetAll
         public async Task<IEnumerable<CustomerMembershipsQuocDt>> GetAllAsync()
         {
             try
             {
-                return await _repository.GetAllAsync();
+                var customers = await _repository.GetAllAsync();
+                return customers;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return Enumerable.Empty<CustomerMembershipsQuocDt>();
             }
         }
 
-        public IQueryable<CustomerMembershipsQuocDt> GetQueryable()
-        {
-            return _repository.GetQueryable();
-        }
-
+        // 4. Hàm GetById
         public async Task<CustomerMembershipsQuocDt> GetByIdAsync(Guid id)
         {
             try
             {
-                return await _repository.GetByIdAsync(id);
+                var customer = await _repository.GetByIdAsync(id);
+                return customer;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
+        // 5. Hàm Search
         public async Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string? customerName, int? currentPointsBalance, string? tierName)
         {
             try
             {
-                return await _repository.SearchAsync(customerName, currentPointsBalance, tierName);
+                // Đổi var thành IEnumerable để nhận dữ liệu từ LINQ thoải mái
+                IEnumerable<CustomerMembershipsQuocDt> query = await _repository.GetAllAsync();
+
+                if (!string.IsNullOrWhiteSpace(customerName))
+                {
+                    query = query.Where(c => c.CustomerName.Contains(customerName, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (currentPointsBalance.HasValue)
+                {
+                    query = query.Where(c => c.CurrentPointsBalance.HasValue && c.CurrentPointsBalance.Value == currentPointsBalance.Value);
+                }
+
+                if (!string.IsNullOrWhiteSpace(tierName))
+                {
+                    query = query.Where(c => c.Tier != null && c.Tier.TierName.Contains(tierName, StringComparison.OrdinalIgnoreCase));
+                }
+
+                return query; // Trả về kết quả sau khi lọc thành công
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return Enumerable.Empty<CustomerMembershipsQuocDt>();
             }
         }
 
+        // 6. Hàm Update
         public async Task<int> UpdateAsync(CustomerMembershipsQuocDt customer)
         {
             try
             {
-                return await _repository.UpdateAsync(customer);
+                var result = await _repository.UpdateAsync(customer);
+                return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }

@@ -1,4 +1,4 @@
-﻿using Membership.Entities.QuocDT.Models;
+using Membership.Entities.QuocDT.Models;
 using Membership.Services.QuocDT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +36,13 @@ namespace Membership.APIWebApp.QuocDT.Controllers
             var token = GenerateJSONWebToken(user);
 
             return Ok(token);
+        }
+
+        [HttpPost("Logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            return Ok(new { message = "Logged out successfully." });
         }
 
         private string GenerateJSONWebToken(SystemUserAccount systemUserAccount)

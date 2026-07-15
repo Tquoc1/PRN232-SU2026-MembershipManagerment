@@ -1,7 +1,8 @@
-﻿using Membership.Entities.QuocDT.Models;
+using Membership.Entities.QuocDT.Models;
 using Membership.Services.QuocDT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,29 +22,16 @@ namespace Membership.APIWebApp.QuocDT.Controllers
 
         // GET: api/<CustomerMembershipsQuocDtController>
         [HttpGet]
+        [EnableQuery]
         [Authorize(Roles = "1,2")]
-        //public IEnumerable<string> Get()
-        public async Task<IEnumerable<CustomerMembershipsQuocDt>> Get()
+        public IQueryable<CustomerMembershipsQuocDt> Get()
         {
-            //return new string[] { "value1", "value2" };
-            try
-            {
-                var memberships = await _service.GetAllAsync();
-                return memberships;
-
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (not implemented here)
-                // Return an appropriate error response
-                Response.StatusCode = 500; // Internal Server Error
-                return Enumerable.Empty<CustomerMembershipsQuocDt>();
-            }
+            return _service.GetQueryable();
         }
 
         // GET api/<CustomerMembershipsQuocDtController>/5
         [HttpGet("{id}")]
-        //[Authorize(Roles = "1,2")]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult<CustomerMembershipsQuocDt>> Get(Guid id)
         {
             try
@@ -170,36 +158,22 @@ namespace Membership.APIWebApp.QuocDT.Controllers
             }
         }
 
-        /*[HttpGet("search")]
-        public async Task<IEnumerable<CustomerMembershipsQuocDt>> GetByCustomerNamePointBalanceTierName([FromQuery] string? customerName = null, [FromQuery] int? currentPointsBalance = null, [FromQuery] string? tierName = null)
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<CustomerMembershipsQuocDt>>> Search(
+            [FromQuery] string? customerName, 
+            [FromQuery] int? currentPointsBalance, 
+            [FromQuery] string? tierName)
         {
             try
             {
                 var memberships = await _service.SearchAsync(customerName, currentPointsBalance, tierName);
-                return memberships;
+                var paginatedList = memberships
+                    .ToList();
+                return Ok(paginatedList);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception (not implemented here)
-                // Return an appropriate error response
-                Response.StatusCode = 500; // Internal Server Error
-                return Enumerable.Empty<CustomerMembershipsQuocDt>();
-            }
-        }*/
-        [HttpGet("{customerName}/{currentPointsBalance}/{tierName}")]
-        public async Task<IEnumerable<CustomerMembershipsQuocDt>> Search(string customerName, int currentPointsBalance, string tierName)
-        {
-            try
-            {
-                var memberships = await _service.SearchAsync(customerName, currentPointsBalance, tierName);
-                return memberships;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (not implemented here)
-                // Return an appropriate error response
-                Response.StatusCode = 500; // Internal Server Error
-                return Enumerable.Empty<CustomerMembershipsQuocDt>();
+                return StatusCode(500, "Internal Server Error");
             }
         }
     }

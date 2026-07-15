@@ -1,4 +1,4 @@
-using Membership.Entities.QuocDT.Models;
+﻿using Membership.Entities.QuocDT.Models;
 using Membership.Repositories.QuocDT.Base;
 using Membership.Repositories.QuocDT.DBContext;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +19,6 @@ namespace Membership.Repositories.QuocDT
             return await _context.CustomerMembershipsQuocDts
                 .Include(x => x.Tier)
                 .ToListAsync();
-        }
-        public IQueryable<CustomerMembershipsQuocDt> GetQueryable()
-        {
-            return _context.CustomerMembershipsQuocDts
-                .Include(x => x.Tier)
-                .AsQueryable();
         }
         public async Task<CustomerMembershipsQuocDt> GetByIdAsync(Guid id)
         {

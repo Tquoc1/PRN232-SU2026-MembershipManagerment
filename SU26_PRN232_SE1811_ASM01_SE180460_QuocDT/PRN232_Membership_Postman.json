@@ -1,0 +1,476 @@
+{
+	"info": {
+		"_postman_id": "8d3e913a-9730-4e3a-912f-9818816c1410",
+		"name": "PRN232_Membership_Assessment",
+		"description": "Collection for testing PRN232 Membership Management Assignment. Includes authentication, CRUD, OData queries, and Paginated Search.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Login (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.text();",
+									"if (pm.response.code === 200 && jsonData) {",
+									"    pm.globals.set(\"token\", jsonData);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"admin@carwash.com\",\n    \"password\": \"admin@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/SystemUserAccounts/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"SystemUserAccounts",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (Staff)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.text();",
+									"if (pm.response.code === 200 && jsonData) {",
+									"    pm.globals.set(\"token\", jsonData);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"staff@carwash.com\",\n    \"password\": \"staff@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/SystemUserAccounts/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"SystemUserAccounts",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/SystemUserAccounts/Logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"SystemUserAccounts",
+								"Logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. CRUD Operations",
+			"item": [
+				{
+					"name": "Get All (No OData)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt",
+								"3fa85f64-5717-4562-b3fc-2c963f66afa6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create (POST)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Nguyen Van A\",\n    \"tierId\": 1,\n    \"joinDate\": \"2026-07-04T00:00:00\",\n    \"isAutoRenewalActive\": true,\n    \"currentPointsBalance\": 150,\n    \"lastReviewDate\": \"2026-07-04T00:00:00\",\n    \"monthlySpendToDate\": 250.50,\n    \"membershipNotes\": \"Super active member\",\n    \"tierExpiryDate\": \"2027-07-04\",\n    \"totalLifetimeVisits\": 12\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (PUT)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"membershipIdquocDt\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n    \"customerName\": \"Nguyen Van A Updated\",\n    \"tierId\": 1,\n    \"joinDate\": \"2026-07-04T00:00:00\",\n    \"isAutoRenewalActive\": false,\n    \"currentPointsBalance\": 200,\n    \"lastReviewDate\": \"2026-07-04T00:00:00\",\n    \"monthlySpendToDate\": 300.00,\n    \"membershipNotes\": \"VIP\",\n    \"tierExpiryDate\": \"2027-07-04\",\n    \"totalLifetimeVisits\": 15\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt",
+								"3fa85f64-5717-4562-b3fc-2c963f66afa6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (DELETE)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt",
+								"3fa85f64-5717-4562-b3fc-2c963f66afa6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Search & Paging",
+			"item": [
+				{
+					"name": "Search (3 Params & Paging)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/CustomerMembershipsQuocDt/search?customerName=Nguyen&currentPointsBalance=150&tierName=Gold&pageIndex=1&pageSize=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"CustomerMembershipsQuocDt",
+								"search"
+							],
+							"query": [
+								{
+									"key": "customerName",
+									"value": "Nguyen"
+								},
+								{
+									"key": "currentPointsBalance",
+									"value": "150"
+								},
+								{
+									"key": "tierName",
+									"value": "Gold"
+								},
+								{
+									"key": "pageIndex",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. OData Queries",
+			"item": [
+				{
+					"name": "OData: Get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/odata/CustomerMembershipsQuocDt",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"odata",
+								"CustomerMembershipsQuocDt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OData: Select & Expand & OrderBy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/odata/CustomerMembershipsQuocDt?$select=CustomerName,CurrentPointsBalance&$expand=Tier&$orderby=CurrentPointsBalance desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"odata",
+								"CustomerMembershipsQuocDt"
+							],
+							"query": [
+								{
+									"key": "$select",
+									"value": "CustomerName,CurrentPointsBalance"
+								},
+								{
+									"key": "$expand",
+									"value": "Tier"
+								},
+								{
+									"key": "$orderby",
+									"value": "CurrentPointsBalance desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OData: Filter by Points Balance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/odata/CustomerMembershipsQuocDt?$filter=CurrentPointsBalance gt 100",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"odata",
+								"CustomerMembershipsQuocDt"
+							],
+							"query": [
+								{
+									"key": "$filter",
+									"value": "CurrentPointsBalance gt 100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5261",
+			"type": "string"
+		}
+	]
+}

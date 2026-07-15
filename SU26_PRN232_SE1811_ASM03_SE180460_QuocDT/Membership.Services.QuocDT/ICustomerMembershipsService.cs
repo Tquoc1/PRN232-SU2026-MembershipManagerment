@@ -1,4 +1,4 @@
-using Membership.Entities.QuocDT.Models;
+﻿using Membership.Entities.QuocDT.Models;
 using Membership.Repositories.QuocDT;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,8 @@ namespace Membership.Services.QuocDT
 {
     public interface ICustomerMembershipsService
     {
-        // query method
+        // quyery method
         Task<IEnumerable<CustomerMembershipsQuocDt>> GetAllAsync();
-        IQueryable<CustomerMembershipsQuocDt> GetQueryable();
         Task<CustomerMembershipsQuocDt> GetByIdAsync(Guid id);
         Task<IEnumerable<CustomerMembershipsQuocDt>> SearchAsync(string? customerName, int? currentPointsBalance, string? tierName);
         // mutaion method
