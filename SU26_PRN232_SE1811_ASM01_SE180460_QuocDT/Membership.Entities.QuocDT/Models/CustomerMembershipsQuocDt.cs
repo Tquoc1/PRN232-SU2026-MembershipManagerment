@@ -13,29 +13,29 @@ public partial class CustomerMembershipsQuocDt
 
     [Required(ErrorMessage = "CustomerName is required.")]
     [StringLength(100, ErrorMessage = "CustomerName cannot exceed 100 characters.")]
+    [RegularExpression(@"^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$", ErrorMessage = "Each word in Customer Name must start with an uppercase letter and contain only letters and spaces.")]
     public string CustomerName { get; set; }
 
     [Required(ErrorMessage = "TierId is required.")]
-    [Range(1, int.MaxValue, ErrorMessage = "TierId must be a positive integer.")]
     public int TierId { get; set; }
 
     public DateTime? JoinDate { get; set; }
 
     public bool? IsAutoRenewalActive { get; set; }
 
-    [Range(0, int.MaxValue, ErrorMessage = "CurrentPointsBalance cannot be negative.")]
+    [Range(0, int.MaxValue, ErrorMessage = "Current points balance must be non-negative.")]
     public int? CurrentPointsBalance { get; set; }
 
     public DateTime? LastReviewDate { get; set; }
 
-    [Range(0.0, double.MaxValue, ErrorMessage = "MonthlySpendToDate cannot be negative.")]
+    [Range(0, (double)decimal.MaxValue, ErrorMessage = "Monthly spend must be non-negative.")]
     public decimal? MonthlySpendToDate { get; set; }
 
     public string MembershipNotes { get; set; }
 
     public DateOnly? TierExpiryDate { get; set; }
 
-    [Range(0, int.MaxValue, ErrorMessage = "TotalLifetimeVisits cannot be negative.")]
+    [Range(0, int.MaxValue, ErrorMessage = "Total lifetime visits must be non-negative.")]
     public int? TotalLifetimeVisits { get; set; }
 
     public virtual MembershipTiersQuocDt Tier { get; set; }

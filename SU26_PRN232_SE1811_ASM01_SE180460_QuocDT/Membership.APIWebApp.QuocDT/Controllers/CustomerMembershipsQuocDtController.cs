@@ -83,7 +83,7 @@ namespace Membership.APIWebApp.QuocDT.Controllers
                 var result = await _service.CreateAsync(customer);
                 if (result > 0)
                 {
-                    return CreatedAtAction(nameof(Get), new { id = customer.MembershipIdquocDt }, customer);
+                    return Ok(result);
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace Membership.APIWebApp.QuocDT.Controllers
                 var result = await _service.UpdateAsync(customer);
                 if (result > 0)
                 {
-                    return NoContent();
+                    return Ok(result);
                 }
                 else
                 {
@@ -136,18 +136,18 @@ namespace Membership.APIWebApp.QuocDT.Controllers
         //public void Delete(int id)
         //{
         //}
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult<bool>> Delete(Guid id)
         {
             try
             {
                 var result = await _service.DeleteAsync(id);
                 if (result > 0)
                 {
-                    return NoContent();
+                    return Ok(true);
                 }
                 else
                 {
-                    return NotFound("Customer membership not found.");
+                    return Ok(false);
                 }
             }
             catch (Exception ex)

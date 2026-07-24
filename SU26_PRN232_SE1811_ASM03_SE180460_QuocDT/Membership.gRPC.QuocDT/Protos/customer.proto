@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+option csharp_namespace = "Membership.gRPC.QuocDT";
+
+package customer;
+
+service CustomerService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetAll (Empty) returns (CustomerListResponse);
+  rpc GetById (GetByIdRequest) returns (CustomerResponse);
+  rpc Create (CreateCustomerRequest) returns (CustomerResponse);
+  rpc Update (UpdateCustomerRequest) returns (CustomerResponse);
+  rpc Delete (DeleteRequest) returns (DeleteResponse);
+}
+
+message Empty {}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+message GetByIdRequest {
+  string membership_id = 1;
+}
+
+message DeleteRequest {
+  string membership_id = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CustomerModel {
+  string membership_id = 1;
+  string customer_name = 2;
+  int32 tier_id = 3;
+  string join_date = 4;
+  bool is_auto_renewal_active = 5;
+  int32 current_points_balance = 6;
+  string last_review_date = 7;
+  double monthly_spend_to_date = 8;
+  string membership_notes = 9;
+  string tier_expiry_date = 10;
+  int32 total_lifetime_visits = 11;
+  string tier_name = 12;
+}
+
+message CustomerListResponse {
+  repeated CustomerModel customers = 1;
+}
+
+message CustomerResponse {
+  CustomerModel customer = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message CreateCustomerRequest {
+  string customer_name = 1;
+  int32 tier_id = 2;
+  string join_date = 3;
+  bool is_auto_renewal_active = 4;
+  int32 current_points_balance = 5;
+  string last_review_date = 6;
+  double monthly_spend_to_date = 7;
+  string membership_notes = 8;
+  string tier_expiry_date = 9;
+  int32 total_lifetime_visits = 10;
+}
+
+message UpdateCustomerRequest {
+  string membership_id = 1;
+  string customer_name = 2;
+  int32 tier_id = 3;
+  string join_date = 4;
+  bool is_auto_renewal_active = 5;
+  int32 current_points_balance = 6;
+  string last_review_date = 7;
+  double monthly_spend_to_date = 8;
+  string membership_notes = 9;
+  string tier_expiry_date = 10;
+  int32 total_lifetime_visits = 11;
+}
