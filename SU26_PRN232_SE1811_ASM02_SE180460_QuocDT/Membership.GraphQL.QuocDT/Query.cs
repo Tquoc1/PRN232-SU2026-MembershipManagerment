@@ -1,19 +1,20 @@
-﻿using HotChocolate;
+using HotChocolate;
 using HotChocolate.Data;
+using HotChocolate.Authorization;
 using Membership.Services.QuocDT;
-using Membership.Entities.QuocDT.Models; // Khớp với namespace chứa CustomerMembershipsQuocDt trong lỗi
+using Membership.Entities.QuocDT.Models;
 
 public class Query
 {
     [UseFiltering]
     [UseSorting]
-    // Đổi từ Task<List<...>> sang Task<IEnumerable<...>> để khớp với Service của bạn
+    [Authorize(Roles = new[] { "1", "2" })]
     public async Task<IEnumerable<CustomerMembershipsQuocDt>> GetCustomerMemberships([Service] ICustomerMembershipsService membershipService)
     {
         return await membershipService.GetAllAsync();
     }
 
-    // Đổi tham số 'int id' thành 'Guid id' vì lỗi báo không thể convert int sang System.Guid
+    [Authorize(Roles = new[] { "1", "2" })]
     public async Task<CustomerMembershipsQuocDt?> GetCustomerMembershipById(Guid id, [Service] ICustomerMembershipsService membershipService)
     {
         return await membershipService.GetByIdAsync(id);
