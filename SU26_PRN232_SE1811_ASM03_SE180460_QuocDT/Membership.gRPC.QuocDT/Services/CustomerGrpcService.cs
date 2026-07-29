@@ -187,12 +187,12 @@ namespace Membership.gRPC.QuocDT.Services
                 throw new RpcException(new Status(StatusCode.Internal, "Failed to update customer membership."));
             }
 
-            var updatedCustomer = await _membershipService.GetByIdAsync(id);
+            // var updatedCustomer = await _membershipService.GetByIdAsync(id);
             return new CustomerResponse
             {
                 Success = true,
                 Message = $"Customer membership updated successfully. Database affected rows: {result}.",
-                Customer = MapToModel(updatedCustomer ?? existing)
+                // Customer = MapToModel(updatedCustomer ?? existing)
             };
         }
 
